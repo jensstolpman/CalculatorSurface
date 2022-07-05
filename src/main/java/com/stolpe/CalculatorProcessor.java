@@ -1,28 +1,27 @@
 package com.stolpe;
 
-import javax.servlet.ServletException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
-import java.util.*;
 
 @WebServlet("/Calculate")
-public class CalculatorProcessor {
+public class CalculatorProcessor extends HttpServlet {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CommandInterpreter commandInterpreter = new CommandInterpreter();
 
-    public void init() throws ServletException {
-
+    public void init() {
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        // Set response content type
-        response.setContentType("text/html");
-
-        // Actual logic goes here.
-        PrintWriter out = response.getWriter();
-        out.println("<h1>Hello World Servlet pt 2</h1>");
-        out.println("<p>"+ new Date().toString() +"</p>");
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        Reader reader = request.getReader();
+        Command command = objectMapper.readValue(reader, Command.class);
+        Command result = commandInterpreter.processCommand(command);
+        response.setContentType("application/json");
+        objectMapper.writeValue(response.getWriter(), result);
     }
 
 }
