@@ -2,9 +2,8 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  height: 100vh;
   display: flex;
   font-size: 10px;
   align-items: flex-end;
@@ -17,8 +16,6 @@ body {
   margin: 0 auto;
   display: flex;
   padding: 0;
-  max-width: 320px;
-  min-width: 320px;
   flex-direction: column;
   background-color: #2f2f31;
 }
@@ -67,6 +64,7 @@ body {
 }
 #calculator .calculator-row {
   display: flex;
+  flex:1;
   padding: 0;
   justify-content: space-around;
 }
@@ -79,6 +77,7 @@ body {
 }
 #calculator .calculator-btn {
   width: 100%;
+  height: 100%;
   color: #D4D4D2;
   border: none;
   cursor: pointer;

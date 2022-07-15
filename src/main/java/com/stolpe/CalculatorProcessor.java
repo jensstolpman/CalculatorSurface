@@ -11,6 +11,13 @@ import java.io.*;
 public class CalculatorProcessor extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final CommandInterpreter commandInterpreter = new CommandInterpreter();
+    static {
+        try {
+            System.loadLibrary("javagiac");
+        } catch (UnsatisfiedLinkError e) {
+            System.err.println("Native code library failed to load.\n" + e);
+        }
+    }
 
     public void init() {
     }

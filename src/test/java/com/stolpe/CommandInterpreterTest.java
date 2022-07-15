@@ -25,6 +25,7 @@ public class CommandInterpreterTest {
         Command command = new Command();
         command.setValue("4-5i");
         command.setCommand("enter");
+        command.setNewEnter(0);
         Command result = commandInterpreter.processCommand(command);
         Assertions.assertEquals(result.getValue(), command.getValue());
     }

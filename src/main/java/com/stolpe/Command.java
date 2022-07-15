@@ -8,6 +8,8 @@ public class Command {
     private List<String> logs = new ArrayList<>();
     private List<String> errors = new ArrayList<>();
 
+    private int newEnter = 0;
+
     public List<String> getErrors() {
         return errors;
     }
@@ -38,5 +40,13 @@ public class Command {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public int getNewEnter() {
+        return newEnter;
+    }
+
+    public void setNewEnter(int isEnter) {
+        this.newEnter = isEnter;
     }
 }

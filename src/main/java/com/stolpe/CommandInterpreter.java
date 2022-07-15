@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CommandInterpreter {
+    public static final String GET_MANTISSA = "getMantissa";
     private CalculatorCore calculator;
     private static final HashMap<String, Method> calculatorCoreMethods = new HashMap<>();
 
@@ -51,10 +52,22 @@ public class CommandInterpreter {
 
     private Complex getMantissa(CalculatorCore calculator) {
         Complex result = new Complex(0,0);
-        Method method = calculatorCoreMethods.get("getMantissa");
+        Method method = calculatorCoreMethods.get(GET_MANTISSA);
         try {
             result = (Complex) method.invoke(calculator);
         } catch (Exception e) {
+            System.err.print(e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+    private Complex getFormattedMantissa(CalculatorCore calculator) {
+        Complex result = new Complex(0,0);
+        Method method = calculatorCoreMethods.get(GET_MANTISSA);
+        try {
+            result = (Complex) method.invoke(calculator);
+        } catch (Exception e) {
+            System.err.print(e.getMessage());
             e.printStackTrace();
         }
         return result;
@@ -64,6 +77,9 @@ public class CommandInterpreter {
         Method method = calculatorCoreMethods.get(command.getCommand());
         List<String> errors = new ArrayList<>();
         Complex value = new Complex(command.getValue());
+        if (command.getNewEnter()==1){
+            value=null;
+        }
         try {
             method.invoke(calculator, value);
         } catch (IllegalAccessException | InvocationTargetException e) {
