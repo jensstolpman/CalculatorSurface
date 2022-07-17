@@ -1,57 +1,29 @@
 Vue.axios=axios;
+const NotFound = { template: '<p>Page not found</p>' }
+const Calc = { template: '#calculator-template' }
+const Config = { template: '#configurator-template' }
+
+const routes = {
+  'calc' : Calc,
+  'config': Config
+}
 new Vue({
     el: '#app',
-    template: '#calc-template',
     data: {
-        value: 0,
-        command: '',
-        logs: [],
-        errors: [],
-        newEnter: 0,
+        currentRoute: 'calc',
+        port: '8080',
     },
-    port: 8080,
-    mounted:function(){
+    computed: {
+      ViewComponent () {
+        return routes[this.currentRoute] || NotFound
+      }
+    },
+    render (h) { return h(this.ViewComponent) },
+    mounted: function(){
        this.setPort(this.getUrlParam('port'));
     },
 
     methods: {
-        addExpression: function (e) {
-            if (this.newEnter==1){
-                this.value = '';
-                this.newEnter = 0;
-            }
-            this.value += e;
-        },
-        getResult: function () {
-            var log = this.value;
-            this.value = eval(this.value);
-            this.logs.push(log + ("=" + this.value));
-        },
-        clear: function () {
-            this.value = 0;
-        },
-        del: function () {
-            this.value = this.value.slice(0, -1);
-        },
-        enter: function () {
-           this.calculate('enter')
-        },
-        calculate: function (e) {
-           this.command=e;
-           var address = '/Calculator/Calculate';
-           const headers = {
-               'Access-Control-Allow-Origin': address
-           };
-           Vue.axios.post(address, this.$data, { headers })
-            .then(response => {
-                                    this.value = response.data.value;
-                                    this.newEnter = 1;
-                              }
-                 )
-            .catch(e => {
-              this.errors.push(e.message)
-            })
-        },
         getUrlParam: function getUrlParam(name) {
           var url_string = window.location;
           var url = new URL(url_string);
