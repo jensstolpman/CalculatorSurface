@@ -19,6 +19,8 @@
     <script src="./vue/vue.js"></script>
     <script src="./vue/axios.js"></script>
     <script src="./vue/vue-axios.js"></script>
+    <script src="./vue/vue-i18n.js"></script>
+    <script src="./Components/i18NMessages.js"></script>
     <script src="./Components/Calc.js"></script>
     <script src="./Components/Conf.js"></script>
     <script src="./Components/Menu.js"></script>

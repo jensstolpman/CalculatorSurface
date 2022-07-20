@@ -3,12 +3,12 @@ package com.stolpe;
 import java.util.*;
 
 public class Command {
-    private String value = null;
-    private String command = null;
+    private String value = "0";
+    private String command = "";
     private List<String> logs = new ArrayList<>();
     private List<String> errors = new ArrayList<>();
 
-    private int newEnter = 0;
+    private int newEnter = 1;
 
     public List<String> getErrors() {
         return errors;

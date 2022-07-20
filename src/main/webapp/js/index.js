@@ -7,7 +7,15 @@ const routes = {
   'calc' : Calc,
   'config': Config
 }
+
+const i18n = new VueI18n({
+  locale: navigator.language.slice(0,2), // set locale
+  fallbackLocale: 'en',
+  messages, // set locale messages
+})
+
 new Vue({
+    i18n,
     el: '#app',
     data: {
         currentRoute: 'calc',

@@ -2,16 +2,33 @@ package com.stolpe;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CommandInterpreter {
+    static {
+        try {
+            System.loadLibrary("javagiac");
+        } catch (UnsatisfiedLinkError e) {
+            System.err.println("Native code library failed to load.\n" + e);
+        }
+    }
+
     public static final String GET_MANTISSA = "getMantissa";
     private CalculatorCore calculator;
+
+    private Command command = new Command();
+    private Config config = new Config();
     private static final HashMap<String, Method> calculatorCoreMethods = new HashMap<>();
 
-    public CommandInterpreter(){
+    private static final CommandInterpreter interpreter = new CommandInterpreter();
+    public static CommandInterpreter getInstance(){
+        return interpreter;
+    }
+    private CommandInterpreter(){
         setCalculator(new CalculatorCore());
         checkCalculatorCoreMethods();
     }
@@ -44,10 +61,16 @@ public class CommandInterpreter {
         Command result = new Command();
         CalculatorCore calculator = getCalculator();
         List<String> errors = invokeCommand(command, calculator);
-        Complex mantissa = getMantissa(calculator);
         result.setErrors(errors);
-        result.setValue(mantissa.toString());
+        result.setValue(getMantissa());
         return result;
+    }
+
+    public String getMantissa() {
+        Complex mantissa = getMantissa(getCalculator());
+        MathContext mathContext = new MathContext(getConfig().getDecimals(), RoundingMode.HALF_EVEN);
+        mantissa.setMathContext(mathContext);
+        return mantissa.toString();
     }
 
     private Complex getMantissa(CalculatorCore calculator) {
@@ -88,4 +111,21 @@ public class CommandInterpreter {
         }
         return errors;
     }
+
+    public void setConfig(Config newConfig) {
+        config = newConfig;
+    }
+
+    public Config getConfig(){
+        return config;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
 }

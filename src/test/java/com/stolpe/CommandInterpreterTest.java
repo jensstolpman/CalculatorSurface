@@ -12,7 +12,7 @@ public class CommandInterpreterTest {
     }
     @Before
     public void setUp() {
-        this.commandInterpreter = new CommandInterpreter();
+        this.commandInterpreter = CommandInterpreter.getInstance();
         Assertions.assertNotNull(this.commandInterpreter.getCalculator());
     }
 

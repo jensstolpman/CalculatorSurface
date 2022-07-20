@@ -6,7 +6,7 @@ document.write(`
             <span v-for="log in logs">{{ log }}</span>
           </div>
 
-          <input type="string" class="calculator-input" v-model="value" @keyup.enter="getResult()">
+          <input type="string" class="calculator-input" v-model="value" @keyup.enter="getResult()" readonly>
 
           <div class="calculator-row">
             <div class="calculator-col">
@@ -128,7 +128,7 @@ document.write(`
       border: none;
       padding: .8rem;
       display: block;
-      font-size: 2.4rem;
+      font-size: 6vh;
       background: none;
       text-align: right;
       font-weight: lighter;
@@ -146,7 +146,6 @@ document.write(`
     #calculator .calculator-row .calculator-col {
       flex: 1;
       box-shadow: 0 0 0 1px #2f2f31;
-
     }
     #calculator .calculator-row .calculator-col.wide {
       flex: 2;
@@ -159,7 +158,7 @@ document.write(`
       cursor: pointer;
       padding: .8rem;
       outline: none;
-      font-size: 1.6rem;
+      font-size: 5vh;
       transition: all .3s ease-in-out;
       font-weight: 200;
       justify-content: center;
@@ -176,16 +175,21 @@ document.write(`
     </style>
 `);
 
+const address = '/Calculator/Calculate';
+
 Vue.component('calculator', {
         template: '#calc-template',
         data() {
             return {
-                value: 0,
+                value: '0',
                 command: '',
                 logs: [],
                 errors: [],
-                newEnter: 0,
+                newEnter: 1,
             }
+        },
+        mounted: function(){
+           this.getMantissa();
         },
         methods: {
             addExpression: function (e) {
@@ -209,9 +213,22 @@ Vue.component('calculator', {
             enter: function () {
                this.calculate('enter')
             },
+            getMantissa: function () {
+               const headers = {
+                   'Access-Control-Allow-Origin': address
+               };
+               Vue.axios.get(address, this.$data, { headers })
+                .then(response => {
+                                        this.value = response.data;
+                                        this.newEnter = 1;
+                                  }
+                     )
+                .catch(e => {
+                  this.errors.push(e.message)
+                })
+            },
             calculate: function (e) {
                this.command=e;
-               var address = '/Calculator/Calculate';
                const headers = {
                    'Access-Control-Allow-Origin': address
                };
